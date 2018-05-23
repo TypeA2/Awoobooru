@@ -1,0 +1,131 @@
+body.dark {
+    --background: #191919;              /* Generic background color */
+    --footer-border-top: #242424;       /* border-top of #page-footer */
+    --text: #a4a4a4;                    /* Plain text colour */
+    --header-top-menu: #2f2f2f;         /* header#top menu */
+    --paginator-border: #242424;        /* div.paginator li a */
+    --link: #ff4500;                    /* a, a:visited, a:link */
+    --search-bar-background: #2f2f2f;   /* input[type='text'] */
+    --search-bar-border: #464646;       /* input[type='text'] border */
+    --autocomplete-background: #191919; /* .ui-autocomplete#ui-id-1 */
+    --autocomplete-border: #242424;     /* .ui-autocomplete#ui-id-1 border */
+    --autocomplete-active: #2f2f2f;     /* .ui-autocomplete#ui-id-1 > li > div.ui-state-active */
+    --search-button-border: #2f2f2f;    /* #search-box .ui-button.gradient border */
+    --search-button-shadow: #242424;    /* #search-box .ui-button.gradient:hover box-shadow */
+    --nav-links: #313131;               /* #nav-links */
+    --nav-links-border: #464646;        /* #nav-links border */
+    --notice: #313131;                  /* #image-resize-notice */
+    --notice-border: #464646;           /* #image-resize-notice border */
+    --commentary-background: #2f2f2f;   /* #artist-commentary */
+    --commentary-border: #464646;       /* #artist-commentary border */
+    --bs-modal-background: #313131;     /* .modal-content */
+    --bs-modal-header-border: #464646;  /* .modal-header border */
+    
+    --tag-type-artist: #e00;    /* artist tag */
+    --tag-type-copyright: #e0e; /* copyright tag */
+
+    --search-button: linear-gradient(#464646, #313131);
+
+    background-color: var(--background) !important;
+    color: var(--text);
+}
+
+.dark  #top, .dark #page, .dark #page-footer {
+    background-color: var(--background) !important;
+}
+
+.dark #page-footer {
+    border-top-color: var(--footer-border-top) !important;
+}
+
+.dark header#top menu:not(.main), .dark header#top menu.main .current a {
+    background-color: var(--header-top-menu) !important;
+}
+
+.dark div.paginator li a {
+    border-color: var(--paginator-border);
+}
+
+.dark a:not(.search-tag):not(.wiki-link):not([class^="tag-type-"]):not([href^="/wiki_pages/"]) {
+    color: var(--link);
+}
+
+.dark #nav a {
+    color: var(--link) !important;
+}
+
+.dark input[type="text"] {
+    background-color: var(--search-bar-background);
+    border-color: var(--search-bar-border);
+    color: var(--text);
+}
+
+.dark .ui-autocomplete#ui-id-1 {
+    background-color: var(--autocomplete-background);
+    border-color: var(--autocomplete-border);
+}
+
+.dark .ui-autocomplete#ui-id-1 > li > div.ui-state-active {
+    background-color: var(--autocomplete-active);
+    border-color: var(--autocomplete-border);
+}
+
+.dark .autocomplete-arrow, .post-count {
+    color: var(--text) !important;
+}
+
+.dark #search-box .ui-button.gradient {
+    background: var(--search-button);
+    color: var(--text);
+    border-color: var(--search-button-border);
+}
+
+.dark #search-box .ui-button.gradient:hover {
+    box-shadow: 1px 1px var(--search-button-shadow);
+}
+
+.dark #nav-links {
+    background-color: var(--nav-links) !important;
+    border-color: var(--nav-links-border) !important;
+}
+
+.dark #search-seq-nav li:hover, #pool-nav li:hover {
+    background-color: var(--nav-links) !important;
+}
+
+.dark div#c-posts div#a-show #content div[id$="-notice"], .dark #c-posts div.notice {
+    background-color: var(--notice) !important;
+    color: var(--text) !important;
+    border-color: var(--notice-border) !important;
+}
+
+.dark #artist-commentary {
+    background-color: var(--commentary-background) !important;
+    border-color: var(--commentary-border) !important;
+}
+
+.dark .modal-content {
+    background-color: var(--bs-modal-background);
+}
+
+.dark .modal-header .close {
+    color: var(--text) !important;
+    text-shadow: none;
+}
+
+.dark .modal-header {
+    border-color: var(--bs-modal-header-border);
+}
+
+.dark .category-1 a, .dark a.tag-type-1 {
+    color: var(--tag-type-artist);
+}
+
+.dark .category-3 a, .dark a.tag-type-3 {
+    color: var(--tag-type-copyright);
+}
+
+/* fixes */
+#has-children-relationship-preview article.post-preview, #has-parent-relationship-preview article.post-preview {
+    height: auto !important;
+}

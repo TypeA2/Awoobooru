@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../css/popup.css" type="text/css">
+        <script src="../scripts/jquery-3.3.1.min.js"></script>
+        <script src="../scripts/options.js"></script>
+    </head>
+    <body>
+        <h2>Dark mode: <span id="darkmode_state">disabled</span></h2>
+        <label class="switch">
+            <input type="checkbox" id="dark_switch" data-setting-name="dark_theme">
+            <span class="slider"></span>
+        </label>
+        <hr>
+        <h2>Additional buttons:</h2>
+        <div class="buttons_row">
+            <label for="preview_switch" class="buttons_label">Preview:</label>
+            <label class="small switch right">
+                <input type="checkbox" id="preview_switch" data-setting-name="preview_button">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="buttons_row">
+            <label for="download_switch" class="buttons_label">Download:</label>
+            <label class="small switch right">
+                <input type="checkbox" id="download_switch" data-setting-name="download_button">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <!--div class="buttons_row">
+            <label for="waifu2x_switch" class="buttons_label">waifu2x:</label>
+            <label class="small switch right">
+                <input type="checkbox" id="waifu2x_switch" data-setting-name="waifu2x_button">
+                <span class="slider"></span>
+            </label>
+        </div-->
+    </body>
+</html>

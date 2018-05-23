@@ -1,0 +1,30 @@
+div.awoo-extras {
+    font-size: 11px;
+    height: 24px;
+}
+
+div.awoo-extras > * {
+    display: none;
+}
+
+div.awoo-extras a {
+    cursor: pointer;
+    margin: 0 2px;
+}
+
+.awoo .modal-dialog {
+    max-width: none !important;
+    width: auto;
+}
+
+.awoo .modal-dialog {
+    width: max-content;
+}
+
+body:not(.dark) .awoo-preview, body:not(.dark) .awoo-download {
+	color: #0073ff !important;
+}
+
+body:not(.dark) .awoo-preview:hover, body:not(.dark) .awoo-download:hover {
+	color: #80b9ff !important;
+}
