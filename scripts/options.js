@@ -24,14 +24,14 @@ function save() {
     let settings = {};
     query(".switch input").forEach(e => settings[e.dataset.settingName] = e.checked);
 
-    chrome.storage.sync.set(settings);
+    browser.storage.sync.set(settings);
 }
 
 function load() {
     let settings = {};
     query(".switch input").forEach(e => settings[e.dataset.settingName] = false);
 
-    chrome.storage.sync.get(
+    browser.storage.sync.get(
         settings,
         function(items) {
             console.info("Loaded settings");
@@ -53,7 +53,7 @@ function toggle_switch(e) {
     let settings = {};
     query(".switch input").forEach(e => settings[e.dataset.settingName] = e.checked);
 
-    chrome.tabs.query(
+    browser.tabs.query(
         {
             active: true,
             currentWindow: true,
@@ -61,7 +61,7 @@ function toggle_switch(e) {
         },
         function (tabs) {
             if (tabs.length) {
-                chrome.tabs.sendMessage(
+                browser.tabs.sendMessage(
                     tabs[0].id,
                     {
                         name: "reload_settings",

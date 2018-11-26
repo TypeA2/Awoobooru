@@ -1,5 +1,6 @@
 body {
     width: 240px;
+    font-family: Arial, sans-serif;
 }
 
 body.awoo-dark {
