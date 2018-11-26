@@ -10,6 +10,12 @@
 
     "description": "Extra Danbooru functions",
 
+    "applications": {
+        "gecko": {
+            "id": "nuanlim29@gmail.com"
+        }
+    },
+
     "permissions": [
         "tabs",
         "storage"
