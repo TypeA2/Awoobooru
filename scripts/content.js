@@ -50,40 +50,9 @@ function Awoobooru() {
         download.href = posts[i].dataset.fileUrl;
         download.download = posts[i].dataset.md5 + "." + posts[i].dataset.fileExt;
 
-        /*let sep1 = document.createElement("span");
-        sep1.className = "awoo-sep1";
-        sep1.innerHTML = "|";
-
-        let waifu2x = document.createElement("a");
-        waifu2x.className = "awoo-waifu2x";
-        waifu2x.innerHTML = "waifu2x";
-        waifu2x.dataset.url = posts[i].dataset.fileUrl;
-        waifu2x.dataset.id = posts[i].dataset.id;
-
-        waifu2x.addEventListener("click", (e) => {
-            if ($(e.target.parentElement).find(".modal[id^='awoo-waifu2x-modal']").length < 1) {
-                let iframe = document.createElement("iframe");
-                iframe.className = "awoo";
-                iframe.src = "http://waifu2x.udp.jp/index.html";
-
-                let modal = generate_modal({
-                    title: "waifu2x",
-                    id: "awoo-waifu2x-modal-" + e.target.dataset.id
-                });
-
-                $(modal).find(".modal-body").append(iframe);
-
-                e.target.parentElement.appendChild(modal);
-            }
-
-            $("#awoo-waifu2x-modal-" + e.target.dataset.id).modal();
-        });*/
-
         extras.appendChild(preview);
         extras.appendChild(sep0);
         extras.appendChild(download);
-        //extras.appendChild(sep1);
-        //extras.appendChild(waifu2x);
 
         posts[i].appendChild(extras);
     }
@@ -170,25 +139,13 @@ function reload_settings(settings) {
             $(".awoo-download").css("display", "none");
         }
 
-        /*if (items.waifu2x_button) {
-            $(".awoo-waifu2x").css("display", "inline");
-        } else {
-            $(".awoo-waifu2x").css("display", "none");
-        }*/
-
         if (items.preview_button && items.download_button) {
             $(".awoo-sep0").css("display", "inline");
         } else {
             $(".awoo-sep0").css("display", "none");
         }
 
-        /*if (items.download_button && items.waifu2x_button) {
-            $(".awoo-sep1").css("display", "inline");
-        } else {
-            $(".awoo-sep1").css("display", "none");
-        }*/
-
-        if (/*items.preview_button && items.waifu2x_button || */items.preview_button && items.download_button) {
+        if (items.preview_button && items.download_button) {
             $(".awoo-sep0").css("display", "inline");
         } else {
             $(".awoo-sep0").css("display", "none");
