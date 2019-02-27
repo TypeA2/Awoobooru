@@ -50,6 +50,15 @@
                 "scripts/multitag.js"
             ],
             "run_at": "document_idle"
-        }
+        },
+		{
+			"matches": [
+				"*://*.donmai.us/posts/*"
+			],
+			"js": [
+				"scripts/posts.js"
+			],
+			"run_at": "document_end"
+		}
     ]
 }
