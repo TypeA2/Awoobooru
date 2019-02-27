@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Awoobooru",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "icons": {
         "32": "icon32.png",
         "64": "icon64.png",
