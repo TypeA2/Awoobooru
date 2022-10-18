@@ -1,31 +1,35 @@
+"use strict";
+
+/** @returns HTMLElement | null */
+function id(name) {
+    return document.getElementById(name);
+}
+
+/** @returns NodeListOf<any> */
+function query(str) {
+    return document.querySelectorAll(str);
+}
+
 function save() {
-    if ($("#dark_switch")[0].checked) {
-        $("#darkmode_state").html("enabled");
+    if (id("dark_switch").checked) {
+        id("darkmode_state").innerHTML = "enabled";
 
-        document.body.classList.add("dark");
+        document.body.classList.add("awoo-dark");
     } else {
-        $("#darkmode_state").html("disabled");
+        id("darkmode_state").innerHTML = "disabled";
 
-        document.body.classList.remove("dark");
+        document.body.classList.remove("awoo-dark");
     }
 
     let settings = {};
-
-    for (let i = 0; i < $(".switch input").length; i++) {
-        const current = $(".switch input")[i];
-
-        settings[current.dataset.settingName] = current.checked;
-    }
+    query(".switch input").forEach(e => settings[e.dataset.settingName] = e.checked);
 
     chrome.storage.sync.set(settings);
 }
 
 function load() {
     let settings = {};
-
-    for (let i = 0; i < $(".switch input").length; i++) {
-        settings[$(".switch input")[i].dataset.settingName] = false;
-    }
+    query(".switch input").forEach(e => settings[e.dataset.settingName] = false);
 
     chrome.storage.sync.get(
         settings,
@@ -35,7 +39,7 @@ function load() {
 
             Object.entries(items).forEach(
                 ([key, val]) => {
-                    $("input[data-setting-name='" + key + "']")[0].checked = val;
+                    query("input[data-setting-name='" + key + "']")[0].checked = val;
                 }
             );
 
@@ -47,12 +51,7 @@ function toggle_switch(e) {
     save();
 
     let settings = {};
-
-    for (let i = 0; i < $(".switch input").length; i++) {
-        const current = $(".switch input")[i];
-
-        settings[current.dataset.settingName] = current.checked;
-    }
+    query(".switch input").forEach(e => settings[e.dataset.settingName] = e.checked);
 
     chrome.tabs.query(
         {
@@ -74,8 +73,16 @@ function toggle_switch(e) {
     )
 }
 
-$(document).ready(function() {
-    $(".switch input").on("input", toggle_switch);
+function ready(cb) {
+    if (document.readyState != "loading") {
+        cb();
+    } else {
+        document.addEventListener("DOMContentLoaded", cb);
+    }
+}
+
+ready(function() {
+    query(".switch input").forEach(e => e.addEventListener("input", toggle_switch));
 
     load();
 });

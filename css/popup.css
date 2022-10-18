@@ -2,7 +2,7 @@ body {
     width: 240px;
 }
 
-body.dark {
+body.awoo-dark {
     background-color: #191919;
     color: #A4A4A4;
 }

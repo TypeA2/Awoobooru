@@ -1,7 +1,7 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "Awoobooru",
-    "version": "1.2.1",
+    "version": "2.0.0",
     "icons": {
         "32": "icon32.png",
         "64": "icon64.png",
@@ -15,7 +15,7 @@
         "storage"
     ],
 
-    "browser_action": {
+    "action": {
         "default_icon": {
             "32": "icon32.png",
             "64": "icon64.png",
@@ -31,7 +31,6 @@
                 "*://*.donmai.us/*"
             ],
             "js": [
-                "scripts/jquery-3.3.1.min.js",
                 "scripts/bootstrap.bundle.min.js",
                 "scripts/content.js"
             ],
@@ -41,24 +40,6 @@
                 "themes/dark.css"
             ],
             "run_at": "document_end"
-        },
-        {
-            "matches": [
-                "*://*.donmai.us/*"
-            ],
-            "js": [
-                "scripts/multitag.js"
-            ],
-            "run_at": "document_idle"
-        },
-		{
-			"matches": [
-				"*://*.donmai.us/posts/*"
-			],
-			"js": [
-				"scripts/posts.js"
-			],
-			"run_at": "document_end"
-		}
+        }
     ]
 }

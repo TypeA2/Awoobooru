@@ -46,7 +46,7 @@ body.dark {
     border-color: var(--paginator-border);
 }
 
-.dark a:not(.search-tag):not(.wiki-link):not([class^="tag-type-"]):not([href^="/wiki_pages/"]) {
+.dark a:not(.search-tag):not(#tag-box .wiki-link):not([class^="tag-type-"]){
     color: var(--link);
 }
 

@@ -1,10 +1,21 @@
 div.awoo-extras {
     font-size: 11px;
+    height: 0;
+    display: flex;
+    justify-content: center;
+}
+
+div.awoo-extras.awoo-enabled {
     height: 24px;
 }
 
 div.awoo-extras > * {
     display: none;
+    line-height: 24px;
+}
+
+div.awoo-extras > .awoo-shown {
+    display: inline;
 }
 
 div.awoo-extras a {
@@ -21,10 +32,6 @@ div.awoo-extras a {
     width: max-content;
 }
 
-body:not(.dark) .awoo-preview, body:not(.dark) .awoo-download {
-	color: #0073ff !important;
-}
-
-body:not(.dark) .awoo-preview:hover, body:not(.dark) .awoo-download:hover {
-	color: #80b9ff !important;
+.awoo-dl-btn {
+    font-weight: bold;
 }

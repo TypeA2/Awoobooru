@@ -1,91 +1,148 @@
+"use strict";
+
+/** @returns HTMLElement | null */
+function id(name) {
+    return document.getElementById(name);
+}
+
+/** @returns NodeListOf<any> */
+function query(str) {
+    return document.querySelectorAll(str);
+}
+
+/** @returns Promise */
+function ensure_post_data(target) {
+    if (!target.dataset.humanFile) {
+        console.info("Retrieving post data for", parseInt(target.dataset.id));
+        return fetch(`https://danbooru.donmai.us/posts/${target.dataset.id}`)
+            .then((response) => response.text())
+            .then((html) => {
+                let doc = new DOMParser().parseFromString(html, "text/html");
+                const download = doc.querySelector("#post-option-download > a");
+
+                target.dataset.humanFile = download.href;
+                target.dataset.humanFileName = download.download;
+
+                const img = doc.getElementById("image");
+                target.dataset.displayFile = img.src;
+                target.dataset.displayType = img.tagName.toLowerCase();
+
+                const size = doc.getElementById("post-info-size");
+                const size_text = size.childNodes[1].innerHTML;
+                target.dataset.fileSize = size_text.substr(0, size_text.lastIndexOf(" "));
+                target.dataset.fileType = size_text.substr(size_text.lastIndexOf(" "));
+
+                let image_size_match = size.childNodes[2].textContent.match(/\((\d+)x(\d+)\)/);
+                target.dataset.imageWidth = image_size_match[1];
+                target.dataset.imageHeight = image_size_match[2];
+            });
+    } else {
+        return Promise.resolve();
+    }
+}
+
 function Awoobooru() {
     console.info("Awooo!");
 
-    let posts = $("#posts article");
+    if (window.location.pathname == "/posts") {
+        query("#posts article").forEach((post) => {
+            let extras = document.createElement("div");
+            extras.className = "awoo awoo-extras";
 
-    for (let i = 0; i < posts.length; i++) {
-        let extras = document.createElement("div");
-        extras.className = "awoo awoo-extras";
+            let preview = document.createElement("a");
+            preview.className = "awoo-preview";
+            preview.innerHTML = "Preview";
 
-        let preview = document.createElement("a");
-        preview.className = "awoo-preview";
-        preview.innerHTML = "Preview";
-        preview.dataset.preview = posts[i].dataset.largeFileUrl;
-        preview.dataset.url = posts[i].dataset.fileUrl;
-        preview.dataset.md5 = posts[i].dataset.md5;
-        preview.dataset.ext = posts[i].dataset.fileExt;
-        preview.dataset.width = posts[i].dataset.width;
-        preview.dataset.height = posts[i].dataset.height;
-        preview.dataset.id = posts[i].dataset.id;
+            preview.addEventListener("click", (e) => {
+                let post = e.target.parentElement.parentElement;
+                ensure_post_data(post)
+                    .then(_ => {
+                        if (!post.modal) {
+                            let display = document.createElement(post.dataset.displayType);
+                            display.className = "awoo";
+                            display.src = post.dataset.displayFile;
 
-        preview.addEventListener("click", (e) => {
-            if ($(e.target.parentElement).find(".modal[id^='awoo-preview-modal']").length < 1) {
-                let img = document.createElement("img");
-                img.className = "awoo";
-                img.src = e.target.dataset.preview;
-    
-                let modal = generate_modal({
-                    title: `<a href="${e.target.dataset.url}" 
-                                download="${e.target.dataset.md5 + "." + e.target.dataset.ext}">
-                                ${e.target.dataset.md5 + "." + e.target.dataset.ext}</a> 
-                                (${e.target.dataset.width + " x " + e.target.dataset.height})`,
-                    id: "awoo-preview-modal-" + e.target.dataset.id
-                });
-    
-                $(modal).find(".modal-body").append(img);
-    
-                e.target.parentElement.appendChild(modal);
-            }
+                            if (post.dataset.displayType == "video") {
+                                display.loop = "loop";
+                                display.controls = "controls";
+                            }
 
-            $("#awoo-preview-modal-" + e.target.dataset.id).modal();
+                            let title = document.createElement("span");
+
+                            let title_post_link = document.createElement("a");
+                            title_post_link.target = "_blank";
+                            title_post_link.href = `https://danbooru.donmai.us/posts/${post.dataset.id}`;
+                            title_post_link.innerHTML = `#${post.dataset.id}`;
+
+                            let title_link = document.createElement("a");
+                            title_link.href = post.dataset.humanFile;
+                            title_link.download = post.dataset.humanFileName;
+                            title_link.innerHTML = post.dataset.humanFileName;
+
+                            let title_extra = document.createTextNode(` ${post.dataset.fileSize} (${post.dataset.imageWidth + " x " + post.dataset.imageHeight})`);
+
+                            title.appendChild(document.createTextNode("Post "));
+                            title.appendChild(title_post_link);
+                            title.appendChild(document.createTextNode(" | "));
+                            title.appendChild(title_link);
+                            title.appendChild(title_extra);
+                
+                            let modal = generate_modal({
+                                title: title,
+                                id: `awoo-preview-modal-${post.dataset.id}`,
+                                body: display
+                            });
+
+                            modal.addEventListener("shown.bs.modal", _ => {
+                                post.dataset.shown = true;
+                                if (post.dataset.displayType == "video") {
+                                    display.play();
+                                }
+                            });
+
+                            modal.addEventListener("hide.bs.modal", _ => {
+                                post.dataset.shown = false;
+                                if (post.dataset.displayType == "video") {
+                                    display.pause();
+                                }
+                            });
+
+                            e.target.parentElement.appendChild(modal);
+
+                            post.modal = new bootstrap.Modal(modal);
+                            console.log(post.modal);
+                        }
+
+                        post.modal.show();
+                    })
+                
+            });
+
+            let sep0 = document.createElement("span");
+            sep0.className = "awoo-sep0";
+            sep0.innerHTML = "&nbsp;|&nbsp;";
+
+            let download = document.createElement("a");
+            download.className = "awoo-download";
+            download.innerHTML = "Download";
+            download.addEventListener("click", (e) => {
+                let post = e.target.parentElement.parentElement;
+                ensure_post_data(post)
+                    .then(_ => {
+                        if (!e.target.href) {
+                            e.target.href = post.dataset.humanFile;
+                            e.target.download = post.dataset.humanFileName;
+                            e.target.click();
+                        }
+                    });
+            });
+
+            extras.appendChild(preview);
+            extras.appendChild(sep0);
+            extras.appendChild(download);
+
+            post.appendChild(extras);
         });
-
-        let sep0 = document.createElement("span");
-        sep0.className = "awoo-sep0";
-        sep0.innerHTML = "|";
-
-        let download = document.createElement("a");
-        download.className = "awoo-download";
-        download.innerHTML = "Download";
-        download.href = posts[i].dataset.fileUrl;
-        download.download = posts[i].dataset.md5 + "." + posts[i].dataset.fileExt;
-
-        /*let sep1 = document.createElement("span");
-        sep1.className = "awoo-sep1";
-        sep1.innerHTML = "|";
-
-        let waifu2x = document.createElement("a");
-        waifu2x.className = "awoo-waifu2x";
-        waifu2x.innerHTML = "waifu2x";
-        waifu2x.dataset.url = posts[i].dataset.fileUrl;
-        waifu2x.dataset.id = posts[i].dataset.id;
-
-        waifu2x.addEventListener("click", (e) => {
-            if ($(e.target.parentElement).find(".modal[id^='awoo-waifu2x-modal']").length < 1) {
-                let iframe = document.createElement("iframe");
-                iframe.className = "awoo";
-                iframe.src = "http://waifu2x.udp.jp/index.html";
-
-                let modal = generate_modal({
-                    title: "waifu2x",
-                    id: "awoo-waifu2x-modal-" + e.target.dataset.id
-                });
-
-                $(modal).find(".modal-body").append(iframe);
-
-                e.target.parentElement.appendChild(modal);
-            }
-
-            $("#awoo-waifu2x-modal-" + e.target.dataset.id).modal();
-        });*/
-
-        extras.appendChild(preview);
-        extras.appendChild(sep0);
-        extras.appendChild(download);
-        //extras.appendChild(sep1);
-        //extras.appendChild(waifu2x);
-
-        posts[i].appendChild(extras);
     }
 
     reload_settings(null);
@@ -94,7 +151,7 @@ function Awoobooru() {
 function generate_modal(options = {}) {
     let root = document.createElement("div");
     root.className = "modal";
-    if (options.id !== undefined) {
+    if (options.id) {
         root.id = options.id;
     }
 
@@ -109,15 +166,14 @@ function generate_modal(options = {}) {
 
     let title = document.createElement("h6");
     title.class = "modal-title";
-    if (options.title !== undefined) {
-        title.innerHTML = options.title;
+    if (options.title) {
+        title.appendChild(options.title);
     }
     
     let close = document.createElement("button");
-    close.className = "close"
+    close.className = "btn-close"
     close.type = "button";
-    close.dataset.dismiss = "modal";
-    close.innerHTML = "&times;";
+    close.dataset.bsDismiss = "modal";
 
     header.appendChild(title);
     header.appendChild(close);
@@ -127,11 +183,23 @@ function generate_modal(options = {}) {
     let body = document.createElement("div");
     body.className = "modal-body";
 
+    if (options.body) {
+        body.appendChild(options.body);
+    }
+
     content.appendChild(body);
     dialog.appendChild(content);
     root.appendChild(dialog);
 
     return root;
+}
+
+function set_class_for_query(str, cls, condition) {
+    if (condition) {
+        query(str).forEach(e => e.classList.add(cls))
+    } else {
+        query(str).forEach(e => e.classList.remove(cls));
+    }
 }
 
 function reload_settings(settings) {
@@ -140,58 +208,21 @@ function reload_settings(settings) {
     function(items) {
         console.info("(Re)loaded settings:", items);
 
-        if (items.dark_theme) {
-            document.body.classList.add("dark");
-        } else {
-            document.body.classList.remove("dark");
-        }
-
-        if (items.preview_button || items.download_button/* || items.waifu2x_button*/) {
-            if ($("#awoobooru-style-override").length < 1) {
-                let style = document.createElement("style");
-                style.id = "awoobooru-style-override";
-                style.innerHTML = "article.post-preview { height: 178px !important; }";
-
-                document.head.appendChild(style);
+        set_class_for_query("body", "dark", items.dark_theme);
+        if (window.location.pathname == "/posts") {
+            set_class_for_query(".awoo-extras", "awoo-enabled", items.preview_button || items.download_button);
+            set_class_for_query(".awoo-preview", "awoo-shown", items.preview_button);
+            set_class_for_query(".awoo-download", "awoo-shown", items.download_button);
+            set_class_for_query(".awoo-sep0", "awoo-shown", items.preview_button && items.download_button);
+        } else if (window.location.pathname.match(/\/posts\/\d.+/)) {
+            if (items.extra_dl_link) {
+                let btn = query("#post-options a[download]")[0].cloneNode(true);
+                btn.classList.add("awoo-dl-btn");
+                
+                id("tag-list").prepend(btn);
+            } else {
+                query(".awoo-dl-btn").forEach(e => e.remove());
             }
-        } else {
-            $("#awoobooru-style-override").remove();
-        }
-
-        if (items.preview_button) {
-            $(".awoo-preview").css("display", "inline");
-        } else {
-            $(".awoo-preview").css("display", "none");
-        }
-
-        if (items.download_button) {
-            $(".awoo-download").css("display", "inline");
-        } else {
-            $(".awoo-download").css("display", "none");
-        }
-
-        /*if (items.waifu2x_button) {
-            $(".awoo-waifu2x").css("display", "inline");
-        } else {
-            $(".awoo-waifu2x").css("display", "none");
-        }*/
-
-        if (items.preview_button && items.download_button) {
-            $(".awoo-sep0").css("display", "inline");
-        } else {
-            $(".awoo-sep0").css("display", "none");
-        }
-
-        /*if (items.download_button && items.waifu2x_button) {
-            $(".awoo-sep1").css("display", "inline");
-        } else {
-            $(".awoo-sep1").css("display", "none");
-        }*/
-
-        if (/*items.preview_button && items.waifu2x_button || */items.preview_button && items.download_button) {
-            $(".awoo-sep0").css("display", "inline");
-        } else {
-            $(".awoo-sep0").css("display", "none");
         }
     });
 }

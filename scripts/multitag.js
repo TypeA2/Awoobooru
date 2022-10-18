@@ -192,5 +192,5 @@ function load_page_for_tags(tags, page) {
 }
 
 if (document.location.pathname === "/posts" || document.location.pathname === "/") {
-    add_search_bar();
+    // add_search_bar();
 }
