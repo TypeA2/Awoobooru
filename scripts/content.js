@@ -44,7 +44,7 @@ function ensure_post_data(target) {
 function Awoobooru() {
     console.info("Awooo!");
 
-    if (window.location.pathname == "/posts") {
+    if (window.location.pathname == "/posts" || window.location.pathname == "/") {
         query("#posts article").forEach((post) => {
             let extras = document.createElement("div");
             extras.className = "awoo awoo-extras";
@@ -209,7 +209,7 @@ function reload_settings(settings) {
         console.info("(Re)loaded settings:", items);
 
         set_class_for_query("body", "dark", items.dark_theme);
-        if (window.location.pathname == "/posts") {
+        if (window.location.pathname == "/posts" || window.location.pathname == "/") {
             set_class_for_query(".awoo-extras", "awoo-enabled", items.preview_button || items.download_button);
             set_class_for_query(".awoo-preview", "awoo-shown", items.preview_button);
             set_class_for_query(".awoo-download", "awoo-shown", items.download_button);
