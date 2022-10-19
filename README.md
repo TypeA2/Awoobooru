@@ -16,7 +16,7 @@ Icon can be found [here](https://www.pixiv.net/member_illust.php?mode=medium&ill
 ### Examples
 
 #### Dark theme, preview / download links
-![preview / download link](https://i.ibb.co/84LxGKm/download.png)
+![preview / download link](https://i.ibb.co/R3zNprD/darkmode.png)
 
 ##### Preview
 Uses the same image that Danbooru displays on the post page
@@ -24,4 +24,4 @@ Uses the same image that Danbooru displays on the post page
 
 ##### Extra download link
 Mostly because I personally use it, adds an easily accessible download link to the top of the tag list
-![extra download link](https://i.ibb.co/R3zNprD/darkmode.png)
+![extra download link](https://i.ibb.co/84LxGKm/download.png)
